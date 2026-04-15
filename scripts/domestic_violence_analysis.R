@@ -151,7 +151,7 @@ ggplot(violence_summary, aes(x = violence, y = n, fill = violence)) +
     x        = "Experienced violence",
     y        = "Number of Women"
   )
-ggsave("outputs/01_outcome_distribution.png", width = 6, height = 5, dpi = 150)
+ggsave("outputs/plots/01_outcome_distribution.png", width = 6, height = 5, dpi = 150)
    
 
 # --- 3.2. Age distribution by outcome: Histogram ---
@@ -165,7 +165,7 @@ ggplot(dv, aes(x = age, fill = violence)) +
     x = "Age (years)",
     y = "Count"
   )
-ggsave("outputs/02_age_distribution.png", width = 8, height = 5, dpi = 150)
+ggsave("outputs/plots/02_age_distribution.png", width = 8, height = 5, dpi = 150)
 
 # Summary statistics for age by outcome
 dv %>%
@@ -195,7 +195,7 @@ ggplot(edu_violence, aes(x = education, y = pct, fill = violence)) +
     x        = "Education level",
     y        = "Percentage (%)"
   )
-ggsave("outputs/03_education_vs_violence_bar.png", width = 7, height = 5, dpi = 150)
+ggsave("outputs/plots/03_education_vs_violence_bar.png", width = 7, height = 5, dpi = 150)
 
 
 # --- 3.3b. Education vs violence: Lollipop Chart ---
@@ -221,7 +221,7 @@ ggplot(edu_lollipop, aes(x = education, y = rate)) +
     x        = "Education level",
     y        = "Violence rate (%)"
   )
-ggsave("outputs/04_education_lollipop.png", width = 7, height = 5, dpi = 150)
+ggsave("outputs/plots/04_education_lollipop.png", width = 7, height = 5, dpi = 150)
 
 
 # --- 3.4. Employment vs violence: Line Graph ---
@@ -249,7 +249,7 @@ ggplot(emp_violence, aes(x = employment, y = pct,
     x        = "Employment status",
     y        = "Percentage (%)"
   )
-ggsave("outputs/05_employment_vs_violence.png", width = 7, height = 5, dpi = 150)
+ggsave("outputs/plots/05_employment_vs_violence.png", width = 7, height = 5, dpi = 150)
 
 
 # --- 3.5. Income distribution: Density Graph ---
@@ -265,14 +265,14 @@ ggplot(dv, aes(x = income, fill = violence)) +
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)
   )
-ggsave("outputs/06_income_density.png", width = 8, height = 5, dpi = 150)
+ggsave("outputs/plots/06_income_density.png", width = 8, height = 5, dpi = 150)
 
 # Income is heavily non-normal, justifying non-parametric methods / log transformation
 ggplot(dv, aes(sample = income)) +
   stat_qq() +
   stat_qq_line(colour = "#ff1493") +
   labs(title = "QQ Plot of Income (Normality Check)")
-ggsave("outputs/07_income_qqplot.png", width = 8, height = 5, dpi = 150)
+ggsave("outputs/plots/07_income_qqplot.png", width = 8, height = 5, dpi = 150)
 
 # Median income comparison
 ### Verify values
@@ -302,7 +302,7 @@ ggplot(dv, aes(x = income, y = education, fill = violence)) +
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)
   )
-ggsave("outputs/08_income_vs_education_density.png", width = 8, height = 5, dpi = 150)
+ggsave("outputs/plots/08_income_vs_education_density.png", width = 8, height = 5, dpi = 150)
 
 
 # --- 3.7. Marital status vs violence: Stacked Bar Graph ---
@@ -319,7 +319,7 @@ ggplot(marital_violence, aes(x = marital_status, y = pct, fill = violence)) +
     x     = "Marital status",
     y     = "Percentage (%)"
   )
-ggsave("outputs/09_marital_status_vs_violence.png", width = 6, height = 5, dpi = 150)
+ggsave("outputs/plots/09_marital_status_vs_violence.png", width = 6, height = 5, dpi = 150)
 
 
 # --- 3.8. Age vs Income by Violence Outcome: Scatter Plot ---
@@ -331,7 +331,7 @@ ggplot(dv, aes(x = age, y = income, colour = violence)) +
     x = "Age",
     y = "Income"
   )
-ggsave("outputs/10_age_vs_income_by_violence.png", width = 6, height = 5, dpi = 150)
+ggsave("outputs/plots/10_age_vs_income_by_violence.png", width = 6, height = 5, dpi = 150)
 
 
 # =============================================================================
@@ -444,4 +444,94 @@ cat("\n--- Logistic Regression Summary ---\n")
 print(summary(model))
 
 
-# --- 5.2.
+# --- 5.2. Odds ratios with confidence intervals ---
+or_table <- model %>%
+  broom::tidy(conf.int = TRUE, exponentiate = TRUE) %>%
+  transmute(
+    Predictor   = term,
+    Odds_Ratio  = round(estimate, 3),
+    Std_Error   = round(std.error, 3),
+    Statistic   = round(statistic, 3),
+    P_Value     = round(p.value, 4),
+    CI_Lower    = round(conf.low, 3),
+    CI_Upper    = round(conf.high, 3)
+  )
+  
+cat("\n--- Logistic Regression Results (Odds Ratios) ---\n")
+print(or_table, row.names = FALSE)
+
+
+# --- 5.3. Visualise odds ratios (forest-style plot) ---
+# Cap CI bounds to avoid axis explosion from near-perfect separation
+# (e.g. "employmentemployed" has only 3 cases — model coefficients are unstable)
+or_plot <- or_table %>%
+  mutate(
+    CI_Lower_capped  = pmax(CI_Lower, 0),
+    CI_Upper_capped  = pmin(CI_Upper, 10),
+    OR_capped        = pmin(Odds_Ratio, 10)   # <-- cap the point too
+  )
+
+ggplot(or_plot, aes(x = OR_capped, y = reorder(Predictor, OR_capped))) +
+  geom_vline(xintercept = 1, linetype = "dashed", colour = "grey50") +
+  geom_errorbarh(
+    aes(xmin = CI_Lower_capped, xmax = CI_Upper_capped),
+    height = 0.25,
+    colour = "grey40"
+  ) +
+  geom_point(
+    aes(colour = P_Value < 0.05),
+    size = 3
+  ) +
+  scale_colour_manual(
+    values = c("TRUE" = "#ff1493", "FALSE" = "#00ff00"),
+    name   = "p < 0.05"
+  ) +
+  scale_x_continuous(
+    labels = scales::number_format(accuracy = 0.0001),
+    limits = c(0, 10)
+  ) +
+  theme(
+    axis.text.x  = element_text(angle = 45, hjust = 1),
+    plot.caption = element_text(hjust = 0.5, size = 10, colour = "grey40")
+  ) +
+  labs(
+    title    = "Logistic Regression: Odds Ratios",
+    subtitle = "95% CI shown; pink = statistically significant at α = 0.05\nNote: OR and CIs capped at 10 - wide bounds reflect small group sizes",
+    x        = "Odds Ratio (capped at 10)",
+    y        = NULL,
+    caption  = "--- Dashed line marks OR = 1 (no effect)" 
+  )
+ggsave("outputs/plots/11_odds_ratios.png", width = 9, height = 6, dpi = 150)
+
+
+# =============================================================================
+# SECTION 6: SUMMARY TABLE
+# =============================================================================
+
+summary_table <- dv %>%
+  group_by(violence) %>%
+  summarise(
+    n = n(),
+    
+    mean_age = round(mean(age, na.rm = TRUE), 1),
+    
+    median_income = median(income, na.rm = TRUE),
+    
+    pct_no_education = round(mean(education == "none", na.rm = TRUE) * 100, 1),
+    pct_primary_edu  = round(mean(education == "primary", na.rm = TRUE) * 100, 1),
+    
+    pct_unemployed = round(mean(employment == "unemployed", na.rm = TRUE) * 100, 1),
+    
+    pct_zero_income = round(mean(income == 0, na.rm = TRUE) * 100, 1),
+    
+    pct_married = round(mean(marital_status == "married", na.rm = TRUE) * 100, 1),
+    
+    .groups = "drop"
+  )
+
+cat("\n--- Group Summary Table ---\n")
+print(summary_table, width = Inf)
+
+write_csv(summary_table, "outputs/group_summary.csv")
+
+cat("\nAnalysis complete. Outputs saved to outputs/\n")
