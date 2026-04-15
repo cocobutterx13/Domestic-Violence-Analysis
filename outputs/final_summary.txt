@@ -1,0 +1,36 @@
+--- Final Summary of Findings ---
+1. Key demographic patterns:
+- The dataset is imbalanced, with more non-violent than violent cases.
+- Income is highly right-skewed and heavily zero-inflated, with over half of respondents reporting zero income.
+- To address this, income was log-transformed (log1p), improving model stability and interpretability.
+- Median income is 0 in both groups, indicating that at least 50% of participants have no reported income.
+- The proportion of zero income is higher in the violence group, suggesting a potential socioeconomic gradient.
+- Clear visual differences exist across education, employment, and marital status.
+2. Statistical inference:
+- Education, employment, and marital status are significantly associated with violence (Chi-square tests).
+- Age shows weaker evidence of association (Welch t-test).
+- Income differs significantly between groups (Wilcoxon test), consistent with its skewed distribution.
+3. Multicollinearity assessment:
+- The correlation matrix shows no strong linear relationships between predictors.
+- Adjusted GVIF values indicate no problematic multicollinearity.
+- This supports the stability and interpretability of the regression coefficients.
+4. Logistic regression findings:
+- Socioeconomic variables remain important after adjustment.
+- Employment and marital status emerge as the strongest predictors.
+- Higher (log-transformed) income is associated with reduced likelihood of experiencing violence.
+- Model estimates are stable and not adversely affected by multicollinearity.
+5. Model performance:
+- The model predicts non-violence more accurately than violence.
+- Sensitivity is lower than specificity, reflecting class imbalance.
+- Accuracy is inflated due to the higher proportion of non-violent cases.
+6. Calibration and probability assessment:
+- Calibration analysis compares predicted probabilities with observed outcomes across groups.
+- Predictions were grouped into bins, and the average predicted probability was compared with the actual observed rate.
+- Points close to the 45-degree line indicate well-calibrated predictions.
+- Deviations from this line suggest over- or under-estimation of risk in certain probability ranges.
+- Larger bins provide more reliable estimates of model calibration.
+7. Conclusion:
+- Domestic violence is strongly associated with socioeconomic factors.
+- Employment and marital status are the most consistent predictors.
+- Income shows a meaningful but complex relationship due to extreme zero inflation.
+- Overall, the model demonstrates reasonable predictive performance and good calibration, with no major multicollinearity concerns.

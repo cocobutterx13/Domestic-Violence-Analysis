@@ -1,0 +1,6 @@
+Predictor,GVIF,Df,Adj_GVIF,Interpretation
+age,1.321,1,1.149,No multicollinearity concern
+education,1.564,3,1.077,No multicollinearity concern
+employment,138.541,2,3.431,Moderate collinearity (review recommended)
+income_log,127.876,1,11.308,High multicollinearity (potential instability)
+marital_status,1.134,1,1.065,No multicollinearity concern
