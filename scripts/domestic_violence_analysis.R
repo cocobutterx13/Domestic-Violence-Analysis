@@ -1,13 +1,32 @@
 # =============================================================================
 # DOMESTIC VIOLENCE ANALYSIS
 # =============================================================================
-# Project:  Domestic Violence Against Women — Socioeconomic and Demographic Factors
-# Dataset:  347 observations, 5 predictors + 1 binary outcome
+# Project:   Domestic Violence Against Women — Socioeconomic and Demographic Factors
+# Dataset:   347 observations, 5 predictors + 1 binary outcome
 # Variables: Age, Education, Employment, Income, Marital Status -> Violence (yes/no)
-# Goal:     Explore how education, employment, income, age, and marital status
-#           relate to the likelihood of experiencing domestic violence.
-# Author:   Caylin Manuel
-# Date:     15-04-2025
+# Goal:      Explore how education, employment, income, age, and marital status
+#            relate to the likelihood of experiencing domestic violence.
+# Author:    Caylin Manuel
+# Date:      April 2026
+# =============================================================================
+
+
+# =============================================================================
+# TABLE OF CONTENTS
+# =============================================================================
+# SECTION 1 - Setup
+# SECTION 2 - Data Import & Cleaning
+# SECTION 3 - Exploratory Data Analysis (EDA)
+# SECTION 4 - Statistical Inference
+# SECTION 5 - Logistic Regression
+#     5.1. Univariate Logistic Regression
+#     5.2. Full Multivariable Logistic Regression
+#     5.3. Collinearity Check (VIF)
+#     5.4. Forest Plot - Odds Ratios
+# SECTION 6 - Model Diagnostics
+#     6.1. Predicted Probabilities
+#     6.2. Confusion Matrix at 0.5 Threshold
+# SECTION 7 - Summary
 # =============================================================================
 
 
@@ -318,3 +337,111 @@ ggsave("outputs/10_age_vs_income_by_violence.png", width = 6, height = 5, dpi = 
 # =============================================================================
 # SECTION 4: STATISTICAL INFERENCE
 # =============================================================================
+# Test whether the observed associations are statistically significant.
+# H0: no association between predictor and violence.
+# H1: there is association between predictor and violence.
+# A p-value < 0.05 suggests that there is sufficient evidence to reject H0.
+
+# --- 4.1. Chi-squared tests for categorical predictors vs outcome ---
+# Create a function to run the Chi-squared test and conclusion for each predictor
+report_chisq <- function(var_name, var, outcome, alpha = 0.05) {
+  test <- chisq.test(table(var, outcome))
+  p_val <- test$p.value
+  
+  cat("\n--- Chi-square:", var_name, "vs Violence ---\n")
+  cat("p-value:", round(p_val, 4), "\n")
+  
+  if (p_val < alpha) {
+    cat("Result: p-value <", alpha, "\u2234 statistically significant.\n")
+    cat("Conclusion: Sufficient evidence to reject H0 (there is an association.\n")
+  } else {
+    cat("Result: p-value >=", alpha, "\u2234 not statistically significant.\n")
+    cat("Conclusion: Fail to reject H0 (insufficient evidence of association.\n")
+  }
+}
+
+# Education
+report_chisq("Education", dv$education, dv$violence)
+
+# Employment
+report_chisq("Employment", dv$employment, dv$violence)
+
+# Marital Status
+report_chisq("Marital Status", dv$marital_status, dv$violence)
+
+
+# --- 4.2. t-test: Age by violence outcome ---
+report_ttest_age <- function(data, alpha = 0.05) {
+  test <- t.test(age ~ violence, data = data)
+  p_val <- test$p.value
+  
+  cat("\n--- Welch t-test: Age by Violence ---\n")
+  cat("Mean age (violence = yes):",
+      round(mean(data$age[data$violence == "yes"], na.rm = TRUE), 2), "\n")
+  cat("Mean age (violence = no):",
+      round(mean(data$age[data$violence == "no"], na.rm = TRUE), 2), "\n")
+  cat("t =", round(test$statistic, 3),
+      "| df =", round(test$parameter, 1), "\n")
+  cat("p-value:", round(p_val, 4), "\n")
+  
+  if (p_val < alpha) {
+    cat("Result: p-value <", alpha, "\u2234 statistically significant.\n")
+    cat("Conclusion: Sufficient evidence to reject H0 (mean ages differ).\n")
+  } else {
+    cat("Result: p-value >=", alpha, "\u2234 not statistically significant.\n")
+    cat("Conclusion: Fail to reject H0 (no evidence of difference in mean ages).\n")
+  }
+}
+
+report_ttest_age(dv)
+
+
+# --- 4.3. Wilcoxon rank-sum test: Income by violence outcome ---
+# Income is heavily right-skewed with many zeros -> non-parametric test preferred
+report_wilcox_income <- function(data, alpha = 0.05) {
+  test <- wilcox.test(income ~ violence, data = data)
+  p_val <- test$p.value
+  
+  cat("\n--- Wilcoxon rank-sum: Income by Violence ---\n")
+  cat("Median income (violence = yes):",
+      round(median(data$income[data$violence == "yes"], na.rm = TRUE), 2), "\n")
+  cat("Median income (violence = no):",
+      round(median(data$income[data$violence == "no"], na.rm = TRUE), 2), "\n")
+  cat("W =", round(test$statistic, 3), "\n")
+  cat("p-value:", round(p_val, 4), "\n")
+  
+  if (p_val < 0.05) {
+    cat("Result: p-value <", alpha, "\u2234 statistically significant.\n")
+    cat("Conclusion: Sufficient evidence to reject H0 (income distributions differ).\n")
+  } else {
+    cat("Result: p-value >=", alpha, "\u2234 not statistically significant.\n")
+    cat("Conclusion: Fail to reject H0 (no evidence of difference in income distributions).\n")
+  }
+}
+
+report_wilcox_income(dv)
+
+
+# =============================================================================
+# SECTION 5: LOGISTIC REGRESSION
+# =============================================================================
+
+# --- 5.1. Model fitting ---
+# glm() requires the outcome to be coded 1/0; relevel so "yes" = 1
+dv_model <- dv %>%
+  mutate(
+    violence_bin = if_else(violence == "yes", 1L, 0L),
+    income_log = log1p(income) # log-transform income to reduce skew
+  )
+
+model <- glm(
+  violence_bin ~ age + education + employment + income_log + marital_status,
+  data   = dv_model,
+  family = binomial(link = "logit")
+)
+
+cat("\n--- Logistic Regression Summary ---\n")
+print(summary(model))
+
+
+# --- 5.2.
