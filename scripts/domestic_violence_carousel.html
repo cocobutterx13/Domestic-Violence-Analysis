@@ -5,19 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Domestic Violence Analysis — LinkedIn Carousel</title>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     FONTS
-     Playfair Display → slide headings (serif, editorial)
-     DM Sans          → body text, captions, labels
-     JetBrains Mono   → GitHub link (monospaced)
-     To swap fonts just change the @import URL and the CSS variables below.
-═══════════════════════════════════════════════════════════════════ -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
 
 <style>
 /* ═══════════════════════════════════════════════════════════════════
-   DESIGN TOKENS — edit these to reskin the entire carousel at once.
+   DESIGN TOKENS
    ─────────────────────────────────────────────────────────────────
    Colours:
      --bg        deep navy background (all slides)
@@ -376,21 +369,6 @@ body {
 </head>
 <body>
 
-<!-- ════════════════════════════════════════════════════════════════════
-     HOW TO EDIT THIS FILE
-     ════════════════════════════════════════════════════════════════
-     • Open directly in any browser — no server needed.
-     • Change CSS variables in :root to reskin colours / fonts globally.
-     • Each slide is a <div class="slide" id="slide-N"> block below.
-     • All chart images are base64-encoded in the <script> at the bottom.
-       To swap a chart: convert your new PNG to base64 (see note in the
-       script block) and replace the matching value in IMGS.
-     • To print to PDF: browser Print → Save as PDF, paper = 1080×1080 px,
-       margins = 0.
-     • To add/remove a slide: add/remove the <div class="slide"> block
-       and update the .pill rows across ALL slides (10 pills per row).
-════════════════════════════════════════════════════════════════════ -->
-
 
 <!-- ════════════════════════════════════════════════════════════════
      SLIDE 1 — TITLE PAGE
@@ -663,10 +641,6 @@ body {
 
 <!-- ════════════════════════════════════════════════════════════════
      SLIDE 5 — INCOME: A COMPLEX PICTURE
-     Key Canva edit: same STAGGERED LAYOUT as slide 4.
-       Row 1 (top): Income density (left) + Income vs Education (right)
-       Row 2 (mid): QQ plot centred
-       Row 3 (btm): Three caption boxes
 ════════════════════════════════════════════════════════════════════ -->
 <div class="slide" id="slide-5">
   <div class="top-bar"></div>
@@ -732,9 +706,6 @@ body {
 
 <!-- ════════════════════════════════════════════════════════════════
      SLIDE 6 — MARITAL STATUS & CORRELATIONS
-     Key Canva edit: "No Multicollinearity Detected" badge is OVERLAID
-     at the horizontal centre between the two images (not above them).
-     Captions dropped to the bottom third of the slide.
 ════════════════════════════════════════════════════════════════════ -->
 <div class="slide" id="slide-6">
   <div class="top-bar"></div>
@@ -764,9 +735,6 @@ body {
     </div>
   </div>
 
-  <!-- "No Multicollinearity Detected" badge OVERLAID at the image join.
-       left:50% + transform centres it exactly on the gap between the two images.
-       top value places it midway through the image frames.                     -->
   <div class="overlap-tag" style="top:268px;left:50%;">
     <span class="tag" style="background:var(--green);color:#0D0D1A;white-space:nowrap;">
       &#10003; No Multicollinearity Detected
@@ -791,8 +759,6 @@ body {
 
 <!-- ════════════════════════════════════════════════════════════════
      SLIDE 7 — ODDS RATIOS: FOREST PLOT
-     Layout: intro card · large centred forest plot · 3 finding tiles.
-     No major Canva structural changes on this slide.
 ════════════════════════════════════════════════════════════════════ -->
 <div class="slide" id="slide-7">
   <div class="top-bar"></div>
@@ -842,9 +808,6 @@ body {
 
 <!-- ════════════════════════════════════════════════════════════════
      SLIDE 8 — MODEL PERFORMANCE
-     Layout: 2 images at top · 3 metric tiles at bottom.
-     Key Canva edit: images sit higher (no intro card above them) and
-     metric tiles moved to the bottom quarter.
 ════════════════════════════════════════════════════════════════════ -->
 <div class="slide" id="slide-8">
   <div class="top-bar"></div>
@@ -898,7 +861,6 @@ body {
 <!-- ════════════════════════════════════════════════════════════════
      SLIDE 9 — MODEL CALIBRATION
      Layout: intro card · large centred calibration plot · 3 info tiles.
-     No major structural Canva changes on this slide.
 ════════════════════════════════════════════════════════════════════ -->
 <div class="slide" id="slide-9">
   <div class="top-bar"></div>
@@ -949,8 +911,6 @@ body {
 <!-- ════════════════════════════════════════════════════════════════
      SLIDE 10 — KEY TAKEAWAYS
      Layout: full-width pink rule · 5 numbered conclusion cards · GitHub CTA.
-     Key Canva edits: pink rule spans the full width directly below the
-     heading; decorative circle visible bottom-right.
 ════════════════════════════════════════════════════════════════════ -->
 <div class="slide" id="slide-10">
   <div class="top-bar"></div>
