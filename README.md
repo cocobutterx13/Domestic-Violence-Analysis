@@ -133,7 +133,7 @@ Domestic-Violence-Analysis/
 
 ## Full Report
 
-A comprehensive written report (PDF) accompanies this repository and covers A comprehensive written report (PDF) accompanies this repository and covers detailed methodology, full results with interpretation, limitations, ethical considerations, and conclusions.
+A comprehensive written report (PDF) accompanies this repository and covers A comprehensive written report (PDF) accompanies this repository and covers detailed methodology, full results with interpretation, discussion, limitations, and conclusions.
 
 ---
 
