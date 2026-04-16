@@ -648,7 +648,7 @@ gvif_interpretation <- gvif_table %>%
     )
   )
 
-write_csv(gvif_interpretation, "outputs/gvif_interpretation.csv")
+write_csv(gvif_interpretation, "outputs/tables/gvif_interpretation.csv")
 cat("\n--- Adjusted Variance Inflation Factor (GVIF) ---\n")
 print(gvif_interpretation, row.names = FALSE)
 
@@ -924,4 +924,4 @@ summary_text <- c(
 )
 
 cat(paste(summary_text, collapse = "\n"))
-writeLines(summary_text, "outputs/final_summary.txt")
+writeLines(summary_text, "outputs/reports/final_summary.txt")
