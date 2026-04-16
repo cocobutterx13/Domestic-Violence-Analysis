@@ -466,7 +466,6 @@ body {
     </span>
   </div>
 
-  <div class="bottom-bar"><span>github.com/cocobutterx13/Domestic-Violence-Analysis</span></div>
 </div><!-- /slide-1 -->
 
 
@@ -511,19 +510,15 @@ body {
        width:calc(var(--slide-size) - 80px);display:flex;flex-direction:column;gap:14px;">
     <div class="card q-card" style="--q-color:var(--pink);">
       <span class="q-num">01</span>
-      <span class="q-text">Does education level affect violence risk?</span>
+      <span class="q-text">How do socioeconomic factors (education, employment, income) relate to domestic violence vulnerability?</span>
     </div>
     <div class="card q-card" style="--q-color:var(--green);">
       <span class="q-num">02</span>
-      <span class="q-text">Is unemployment a significant risk factor?</span>
+      <span class="q-text">Does marital status influence exposure to or experience of domestic violence?</span>
     </div>
     <div class="card q-card" style="--q-color:var(--purple);">
       <span class="q-num">03</span>
-      <span class="q-text">How does income relate to violence likelihood?</span>
-    </div>
-    <div class="card q-card" style="--q-color:var(--gold);">
-      <span class="q-num">04</span>
-      <span class="q-text">Does marital status predict risk?</span>
+      <span class="q-text">Which demographic and contextual factors are most predictive of vulnerability when modelled jointly?</span>
     </div>
   </div>
 
@@ -586,13 +581,13 @@ body {
   <div class="content two-col" style="top:680px;bottom:42px;">
     <!-- Left caption: pink stripe.  Edit the text inside each .chart-caption -->
     <div class="card--accent chart-caption" style="--accent-color:var(--pink);padding:12px 12px 12px 18px;">
-      Over half the sample reported no violence. This class imbalance inflates overall
+      About 75% of the sample reported no violence (≈3:1 imbalance). This inflates overall
       accuracy &mdash; sensitivity is the more meaningful metric.
     </div>
     <!-- Right caption: green stripe -->
     <div class="card--accent chart-caption" style="--accent-color:var(--green);padding:12px 12px 12px 18px;">
-      Age distributions overlap substantially. Welch t-test shows weak evidence of
-      difference, suggesting age is not a dominant predictor alone.
+      Age distributions overlap substantially. The difference is statistically significant,
+      but small in magnitude, suggesting age is not a dominant predictor alone.
     </div>
   </div>
 
@@ -658,12 +653,12 @@ body {
   <!-- ── BOTTOM ROW: Three caption boxes ── -->
   <div class="content three-col" style="top:730px;bottom:42px;">
     <div class="card--accent chart-caption" style="--accent-color:var(--purple);padding:10px 10px 10px 16px;">
-      Lower education levels correspond to higher proportions of violence,
-      a consistent pattern across all groupings.
+      Violence rates vary non-linearly across education levels, with primary education
+      showing the highest risk.
     </div>
     <div class="card--accent chart-caption" style="--accent-color:var(--pink);padding:10px 10px 10px 16px;">
       The lollipop chart highlights relative proportions clearly;
-      secondary education or below shows elevated risk.
+      primary education stands out as the highest-risk group.
     </div>
     <div class="card--accent chart-caption" style="--accent-color:var(--green);padding:10px 10px 10px 16px;">
       Unemployed respondents face the highest violence rates.
@@ -773,7 +768,7 @@ body {
 
   <div class="overlap-tag" style="top:268px;left:50%;">
     <span class="tag" style="background:var(--green);color:#0D0D1A;white-space:nowrap;">
-      &#10003; No Multicollinearity Detected
+      &#9888; Some Multicollinearity Present
     </span>
   </div>
 
@@ -784,8 +779,8 @@ body {
       substantially elevated risk, confirmed by chi-square testing.
     </div>
     <div class="card--accent chart-caption" style="--accent-color:var(--green);padding:12px 12px 12px 18px;">
-      All pairwise correlations between predictors are weak. Adjusted GVIF values confirm
-      no problematic multicollinearity &mdash; model coefficients are reliable.
+      Most predictors show low collinearity, but income and employment are highly correlated.
+      This overlap should be considered when interpreting their individual effects.
     </div>
   </div>
 
@@ -826,7 +821,7 @@ body {
   <div class="content finding-row" style="top:660px;bottom:42px;">
     <div class="card finding-tile" style="--tile-color:var(--pink);">
       <div class="ft-label">Employment</div>
-      <div class="ft-val">Strongest predictor: OR &gt; 1 for unemployment</div>
+      <div class="ft-val">Strongest predictor: employment categories show very large ORs vs unemployed baseline</div>
     </div>
     <div class="card finding-tile" style="--tile-color:var(--green);">
       <div class="ft-label">Marital Status</div>
@@ -834,7 +829,7 @@ body {
     </div>
     <div class="card finding-tile" style="--tile-color:var(--purple);">
       <div class="ft-label">Income (log)</div>
-      <div class="ft-val">Higher income &rarr; lower violence risk</div>
+      <div class="ft-val">Higher income (financial independence) &rarr; lower violence risk</div>
     </div>
   </div>
 
@@ -882,7 +877,7 @@ body {
     </div>
     <div class="metric-tile">
       <div class="mt-header" style="background:var(--pink);">Lower Sensitivity</div>
-      <div class="mt-body">Misses some true violence cases, class imbalance effect.</div>
+      <div class="mt-body">Identifies very few true violence cases (very low sensitivity), driven by class imbalance.</div>
     </div>
     <div class="metric-tile">
       <div class="mt-header" style="background:var(--purple);">Inflated Accuracy</div>
@@ -972,15 +967,15 @@ body {
        width:calc(var(--slide-size) - 80px);display:flex;flex-direction:column;gap:14px;">
     <div class="card conclusion-card" style="--c-color:var(--pink);">
       <span class="c-num">01</span>
-      <span class="c-text">Employment &amp; marital status are the strongest predictors of domestic violence risk.</span>
+      <span class="c-text">Employment &amp; marital status are the strongest and most consistent predictors of domestic violence risk in this sample.</span>
     </div>
     <div class="card conclusion-card" style="--c-color:var(--green);">
       <span class="c-num">02</span>
-      <span class="c-text">Income shows a meaningful but complex relationship (heavily zero-inflated but significant).</span>
+      <span class="c-text">Higher income (log-transformed) is significantly associated with reduced odds of violence, suggesting financial independence as a protective factor.</span>
     </div>
     <div class="card conclusion-card" style="--c-color:var(--purple);">
       <span class="c-num">03</span>
-      <span class="c-text">No multicollinearity detected. Model coefficients are stable and interpretable.</span>
+      <span class="c-text">Some multicollinearity exists (notably income vs employment), requiring cautious interpretation.</span>
     </div>
     <div class="card conclusion-card" style="--c-color:var(--gold);">
       <span class="c-num">04</span>
@@ -988,7 +983,7 @@ body {
     </div>
     <div class="card conclusion-card" style="--c-color:var(--pink);">
       <span class="c-num">05</span>
-      <span class="c-text">Socioeconomic interventions (employment support, income security) may reduce risk.</span>
+      <span class="c-text">Socioeconomic interventions (employment support, income security, education access) may represent meaningful pathways to reducing domestic violence risk.</span>
     </div>
   </div>
 
