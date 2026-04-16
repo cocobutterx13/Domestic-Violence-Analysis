@@ -895,7 +895,7 @@ ggsave("outputs/plots/15_calibration_plot.png", width = 6, height = 5, dpi = 150
 # SECTION 7: SUMMARY
 # =============================================================================
 summary_text <- c(
-  "--- Final Summary of Findings ---",
+  "--- Summary of Findings ---",
   
   "1. Key demographic patterns:",
   "- The dataset is imbalanced, with more non-violent than violent cases.",
@@ -941,4 +941,4 @@ summary_text <- c(
 )
 
 cat(paste(summary_text, collapse = "\n"))
-writeLines(summary_text, "outputs/reports/final_summary.txt")
+writeLines(summary_text, "outputs/reports/summary.txt")

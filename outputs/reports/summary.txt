@@ -1,4 +1,4 @@
---- Final Summary of Findings ---
+--- Summary of Findings ---
 1. Key demographic patterns:
 - The dataset is imbalanced, with more non-violent than violent cases.
 - Income is highly right-skewed and heavily zero-inflated, with over half of respondents reporting zero income.
