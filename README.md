@@ -89,7 +89,6 @@ All tests use α = 0.05. Results are saved as styled table outputs.
 - **Calibration plot**: Observed vs predicted probability across decile bins
 
 ### Section 7 — Summary
-Key findings printed to console and saved as a plain text report.
 
 ---
 
@@ -99,7 +98,7 @@ Key findings printed to console and saved as a plain text report.
 - **Education, employment, and marital status** are significantly associated with violence (Chi-square tests)
 - **Employment and marital status** are the strongest predictors in the logistic regression model
 - **Higher income** (log-transformed) is associated with reduced likelihood of violence
-- No problematic multicollinearity detected (adjusted GVIF values are within acceptable range)
+- Most predictors show no multicollinearity concern, though income_log and employment show notable collinearity and should be interpreted with caution.
 - The model predicts non-violence more accurately than violence, reflecting class imbalance
 
 ---
@@ -113,7 +112,7 @@ Domestic-Violence-Analysis/
 │
 ├── scripts/               # R scripts for analysis, html file for summary report
 │
-├── outputs/               # Generated plots, tables, and results
+├── outputs/               # Generated plots, tables, and reports
 │
 ├── Domestic-Violence-Analysis.Rproj   # RStudio project file
 ├── .gitignore
