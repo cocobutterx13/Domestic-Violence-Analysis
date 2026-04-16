@@ -137,11 +137,11 @@ save_table_as_plot <- function(df, title, filename,
 # SECTION 2 — DATA IMPORT & CLEANING
 # =============================================================================
 
-# --- 2.1. Read the raw CSV ---
+# --- 2.1. Read the Raw CSV ---
 raw_data <- read.csv("data/Domestic_violence.csv")
 
 
-# --- 2.2. Inspect what was loaded ---
+# --- 2.2. Inspect Data ---
 glimpse(raw_data)
 
 summary(raw_data)
@@ -156,7 +156,24 @@ save_table_as_plot(
   filename = "outputs/tables/01_data_head.png"
 )
 
-# -- 2.3. Clean column names ---
+
+# -- 2.3. Check For Missing Values  ---
+missing_summary <- data.frame(
+  Variable = names(raw_data),
+  Missing  = colSums(is.na(raw_data)),
+  Pct_Missing = round(colSums(is.na(raw_data)) / nrow(raw_data) * 100, 1)
+) %>%
+  filter(Missing > 0)
+
+if (nrow(missing_summary) == 0) {
+  cat("No missing values detected in any column.\n")
+} else {
+  cat("Missing values found:\n")
+  print(missing_summary, row.names = FALSE)
+}
+
+
+# -- 2.4. Clean Column Names ---
 dv <- raw_data %>%
   rename_with(str_trim) %>%           # Remove whitespace from all names
   rename(
@@ -170,7 +187,7 @@ dv <- raw_data %>%
   )
 
 
-# --- 2.4. Tidy string columns ---
+# --- 2.5. Tidy String Columns ---
 dv <- dv %>%
   mutate(
     # Standardise case and strip stray spaces in character columns
@@ -199,7 +216,7 @@ dv <- dv %>%
 # SECTION 3: EXPLORATORY DATA ANALYSIS (EDA)
 # =============================================================================
 
-# --- 3.1. Outcome distribution: Bar Graph ---
+# --- 3.1. Outcome Distribution: Bar Graph ---
 # Summary of Violence outcome
 violence_summary <- dv %>%
   count(violence) %>%
@@ -226,7 +243,7 @@ ggplot(violence_summary, aes(x = violence, y = n, fill = violence)) +
 ggsave("outputs/plots/01_outcome_distribution.png", width = 6, height = 5, dpi = 150)
    
 
-# --- 3.2. Age distribution by outcome: Histogram ---
+# --- 3.2. Age Distribution by Outcome: Histogram ---
 ggplot(dv, aes(x = age, fill = violence)) +
   geom_histogram(binwidth = 5, colour = "white", alpha = 0.6,
                  position = "identity") +
@@ -258,7 +275,7 @@ save_table_as_plot(
 )
 
 
-# --- 3.3a. Education vs violence: Bar Chart ---
+# --- 3.3a. Education vs Violence: Bar Chart ---
 edu_violence <- dv %>%
   count(education, violence) %>%
   group_by(education) %>%
@@ -276,7 +293,7 @@ ggplot(edu_violence, aes(x = education, y = pct, fill = violence)) +
 ggsave("outputs/plots/03_education_vs_violence_bar.png", width = 7, height = 5, dpi = 150)
 
 
-# --- 3.3b. Education vs violence: Lollipop Chart ---
+# --- 3.3b. Education vs Violence: Lollipop Chart ---
 edu_lollipop <- dv %>%
   group_by(education) %>%
   summarise(rate = mean(violence == "yes") * 100)
@@ -302,7 +319,7 @@ ggplot(edu_lollipop, aes(x = education, y = rate)) +
 ggsave("outputs/plots/04_education_lollipop.png", width = 7, height = 5, dpi = 150)
 
 
-# --- 3.4. Employment vs violence: Line Graph ---
+# --- 3.4. Employment vs Violence: Line Graph ---
 emp_violence <- dv %>%
   count(employment, violence) %>%
   group_by(employment) %>%
@@ -330,7 +347,7 @@ ggplot(emp_violence, aes(x = employment, y = pct,
 ggsave("outputs/plots/05_employment_vs_violence.png", width = 7, height = 5, dpi = 150)
 
 
-# --- 3.5. Income distribution: Density Graph ---
+# --- 3.5. Income Distribution: Density Graph ---
 # Log1p transform handles the many zero-income observations
 ggplot(dv, aes(x = income, fill = violence)) +
   geom_density(alpha = 0.5) +
@@ -369,7 +386,7 @@ save_table_as_plot(
 )
 
 
-# --- 3.6. Income distribution across education levels: Density Graph ---
+# --- 3.6. Income Distribution Across Education Levels: Density Graph ---
 ggplot(dv, aes(x = income, y = education, fill = violence)) +
   geom_density_ridges(alpha = 0.6, scale = 1.1) +
   scale_x_continuous(
@@ -388,7 +405,7 @@ ggplot(dv, aes(x = income, y = education, fill = violence)) +
 ggsave("outputs/plots/08_income_vs_education_density.png", width = 8, height = 5, dpi = 150)
 
 
-# --- 3.7. Marital status vs violence: Stacked Bar Graph ---
+# --- 3.7. Marital Status vs Violence: Stacked Bar Graph ---
 marital_violence <- dv %>%
   count(marital_status, violence) %>%
   group_by(marital_status) %>%
