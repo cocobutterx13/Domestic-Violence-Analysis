@@ -207,6 +207,42 @@ body {
   line-height: 1.1;
 }
 
+/* ─── PRINT STYLES ─────────────────────────────────────────────────
+   Each slide fills exactly one page. No margins, no cutoff.          */
+@media print {
+  @page {
+    size: 1080px 1080px;
+    margin: 0;
+  }
+
+  html, body {
+    width: 1080px;
+    height: 1080px;
+    margin: 0;
+    padding: 0;
+    background: #060610 !important;
+    gap: 0;
+    display: block;
+  }
+
+  .slide {
+    width: 1080px !important;
+    height: 1080px !important;
+    page-break-after: always;
+    break-after: page;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    overflow: hidden;
+    box-shadow: none;
+    margin: 0 !important;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
 /* ─── INTRO CARD ───────────────────────────────────────────────────
    Single-sentence context card below the heading.                    */
 .slide-intro {
